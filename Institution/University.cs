@@ -1,5 +1,6 @@
 using InternshipTest.Person;
 using System.Collections.Generic;
+using System;
 
 namespace InternshipTest.Institution
 {
@@ -13,33 +14,72 @@ namespace InternshipTest.Institution
             students = new List<Student>();
         }
 
-        public void AddStudent(Student student)
+        public void AddListOfStudent(List<Student> students)
         {
-            students.Add(new Student(student.name));
+            if (students != null)
+            {
+                foreach (var item in students)
+                {
+                    this.students.Add(new Student(item));
+                }
+            }
         }
 
-        public List<Student> GetAverage()
-        {
-            double Ave;
-            double sum = 0;
-            List<Student> InterShipStud = new List<Student>();
+        public void AddStudent(string line)//метод для майбутньої роботи з файлом чи базою даних
+        {                                  //приклад стрічки: Andrew Kostenko 67
+            string[] data = line.Split();
+            Student student = new Student(data[0] + " " + data[1]);
+            student.SetKnowledge(new Knowledge(System.Convert.ToUInt32(data[2])));
+            students.Add(student);
 
-            foreach (var item in students)
+        }
+        public void AddStudent(Student student)     //я зрозумів, що ліпше додати студента за допомогою
+        {                                           //копіювального конструктора, так як при багатьох атрибутах
+            students.Add(new Student(student));     //додавання з допомогою них не буде ефективним 
+        }
+
+        public static double GetAverage(List<Student> students)
+        {
+            if (students.Count == 0)
             {
-                sum +=item.knowledge.level;
+                try
+                {
+                    throw new Exception("List of students is empty");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                
             }
 
-            Ave = sum / (double)students.Count;
+            double average = 0;
+            double sum = 0;
 
             foreach (var item in students)
             {
-                if (Ave < item.knowledge.level)
+                sum += item.knowledge.level;
+            }
+
+            average = sum / (double)students.Count;
+
+            return average;
+        }
+
+        public List<Student> GetListOfStudents()
+        {           
+            List<Student> intership_student = new List<Student>();
+            double average = GetAverage(this.students); ;
+        
+            foreach (var item in students)
+            {
+                if (average < item.knowledge.level)
                 {
-                    InterShipStud.Add(new Student(item));
+                    intership_student.Add(new Student(item));
                 }
             }
 
-            return InterShipStud;
+            return intership_student;
 
         }
     }

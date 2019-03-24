@@ -9,7 +9,6 @@ namespace InternshipTest.Person
             this.name = name;
             knowledge = new Knowledge(0);
         }
-
         public Student(Student student)
         {
             name = student.name;
@@ -18,7 +17,12 @@ namespace InternshipTest.Person
 
         public void SetKnowledge(Knowledge knowledge)
         {
-            this.knowledge = new Knowledge(knowledge.level);          
+                this.knowledge = new Knowledge(knowledge.level);                     
+        }
+
+        public override string ToString()
+        {
+            return name + " " + knowledge.level;
         }
     }
 }
